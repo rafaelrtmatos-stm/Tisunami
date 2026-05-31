@@ -223,11 +223,11 @@ export function TsunamiLogo({ size = 160, showText = true, className = "", imgSt
           className="absolute bottom-[-10px] w-[130%] flex flex-col items-center justify-center pointer-events-none drop-shadow-[0_6px_8px_rgba(0,0,0,0.6)]"
           style={{ transform: `scale(${size / 160}) translateY(${size * 0.05}px)` }}
         >
-          {/* Main 3D Text Header "Tusnami" spelling from logo */}
+          {/* Main 3D Text Header "Tsunami" spelling from logo */}
           <div className="relative font-extrabold uppercase select-none flex justify-center text-center">
             {/* Background duplicate elements to simulate the chunky 3D blue outline */}
             <span className="text-3xl tracking-tighter text-[#091428]" style={{ WebkitTextStroke: '10px #091428' }}>
-              Tusnami
+              Tsunami
             </span>
             <span 
               className="absolute inset-0 text-3xl tracking-tighter bg-gradient-to-b from-[#FFF2B2] via-[#FCD535] to-[#B45309] bg-clip-text text-transparent" 
@@ -237,7 +237,7 @@ export function TsunamiLogo({ size = 160, showText = true, className = "", imgSt
                 transform: 'translateY(-1px)'
               }}
             >
-              Tusnami
+              Tsunami
             </span>
           </div>
         </div>

@@ -171,3 +171,17 @@ body {
   animation: drip-animation 8s infinite linear;
 }
 
+/* Fast cascading stream animation for active draft beer pour */
+@keyframes pour-stream-animation {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-pour-stream {
+  animation: pour-stream-animation 0.7s infinite linear;
+}
+

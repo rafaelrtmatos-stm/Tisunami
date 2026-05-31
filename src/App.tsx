@@ -38,15 +38,37 @@ export default function App() {
   
   // Filling Beer Glass animation level
   const [fillLevel, setFillLevel] = useState(0);
+  const [isPouring, setIsPouring] = useState(false);
+  const [showTapStream, setShowTapStream] = useState(false);
 
   // Trigger glass fill animation when opening the app / changing entry screen
   useEffect(() => {
     if (screen === 'splash' || screen === 'login') {
       setFillLevel(0);
-      const timer = setTimeout(() => {
-        setFillLevel(85);
-      }, 150);
-      return () => clearTimeout(timer);
+      setIsPouring(true);
+      setShowTapStream(true);
+      
+      const duration = 2800; // 2.8s of smooth realistic fluid rise
+      const start = Date.now();
+      
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - start;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Quad ease-out curve for natural liquid rising velocity slowing down at the top
+        const easeProgress = 1 - (1 - progress) * (1 - progress);
+        setFillLevel(easeProgress * 85);
+        
+        if (progress >= 1) {
+          clearInterval(timer);
+          setIsPouring(false);
+          setTimeout(() => {
+            setShowTapStream(false);
+          }, 350);
+        }
+      }, 30);
+      
+      return () => clearInterval(timer);
     }
   }, [screen]);
   
@@ -95,7 +117,7 @@ export default function App() {
   const [sweatDrops, setSweatDrops] = useState<{ left: string; top: string; size: string; opacity: number; delay: string; isSliding?: boolean }[]>([]);
 
   useEffect(() => {
-    const newBubbles = Array.from({ length: 28 }).map(() => ({
+    const newBubbles = Array.from({ length: 32 }).map(() => ({
       left: `${Math.floor(Math.random() * 95)}%`,
       size: `${Math.floor(Math.random() * 5) + 2}px`,
       delay: `${(Math.random() * 8).toFixed(1)}s`,
@@ -103,13 +125,17 @@ export default function App() {
     }));
     setBubbles(newBubbles);
 
-    const dots = Array.from({ length: 45 }).map((_, i) => ({
+    const dots = Array.from({ length: 75 }).map((_, i) => ({
       left: `${2 + Math.random() * 96}%`,
-      top: `${5 + Math.random() * 90}%`,
-      size: `${(1.2 + Math.random() * 3.5).toFixed(1)}px`,
+      top: `${3 + Math.random() * 94}%`,
+      size: i % 3 === 0 
+        ? `${(1.0 + Math.random() * 1.5).toFixed(1)}px` // tiny mist droplets
+        : i % 3 === 1 
+          ? `${(1.6 + Math.random() * 2.4).toFixed(1)}px` // medium dew
+          : `${(2.6 + Math.random() * 3.8).toFixed(1)}px`, // larger condensation beads
       opacity: 0.35 + Math.random() * 0.55,
-      delay: `${(Math.random() * 6).toFixed(1)}s`,
-      isSliding: i % 6 === 0
+      delay: `${(Math.random() * 5).toFixed(1)}s`,
+      isSliding: i % 8 === 0 // 1 in 8 droplets actively slide
     }));
     setSweatDrops(dots);
   }, []);
@@ -374,6 +400,40 @@ export default function App() {
                 <div className="absolute left-8 top-10 h-48 w-0.5 bg-white/20 blur-[0.5px]"></div>
                 <div className="absolute right-9 bottom-12 h-64 w-[1px] bg-white/10 blur-[1px]"></div>
                 
+                {/* Animated beer pouring stream from tap entering inside glass frame */}
+                {showTapStream && (
+                  <div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-600 z-10 shadow-[0_0_20px_rgba(255,193,7,0.85)] flex flex-col justify-between overflow-hidden cursor-default pointer-events-none"
+                    style={{
+                      bottom: `${fillLevel}%`,
+                      borderBottomRightRadius: '12px',
+                      borderBottomLeftRadius: '12px',
+                      opacity: isPouring ? 0.95 : 0,
+                      transition: 'opacity 300ms ease-out'
+                    }}
+                  >
+                    {/* Fast cascading stream overlay patterns */}
+                    <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.95)_45%,rgba(255,255,255,0)_100%)] h-32 w-full animate-pour-stream pointer-events-none"></div>
+                    <div className="absolute inset-y-0 left-1 right-1 bg-white/15 blur-[0.5px]"></div>
+                  </div>
+                )}
+                
+                {/* Collision Splashing particles/froth at fluid intersection */}
+                {isPouring && (
+                  <div 
+                    className="absolute left-1/2 -translate-x-1/2 bg-white/95 rounded-full flex flex-col items-center justify-center z-15 shadow-[0_0_25px_rgba(255,255,255,0.95),_0_-4px_12px_rgba(255,193,7,0.5)] border-t border-white/60 pointer-events-none"
+                    style={{
+                      bottom: `calc(${fillLevel}% - 8px)`,
+                      width: '45px',
+                      height: '18px',
+                    }}
+                  >
+                    {/* Splash micro bubbles */}
+                    <span className="w-full h-full rounded-full animate-ping bg-white/40 absolute"></span>
+                    <span className="text-[7px] text-[#A16207] font-black animate-pulse uppercase leading-none select-none tracking-tighter">POUR</span>
+                  </div>
+                )}
+
                 {/* Active frosty sweating condensation droplets on glass body */}
                 {sweatDrops.map((drop, idx) => (
                   <div
@@ -505,6 +565,40 @@ export default function App() {
                 <div className="absolute left-8 top-10 h-48 w-0.5 bg-white/20 blur-[0.5px]"></div>
                 <div className="absolute right-9 bottom-12 h-64 w-[1px] bg-white/10 blur-[1px]"></div>
                 
+                {/* Animated beer pouring stream from tap entering inside glass frame */}
+                {showTapStream && (
+                  <div 
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-600 z-10 shadow-[0_0_20px_rgba(255,193,7,0.85)] flex flex-col justify-between overflow-hidden cursor-default pointer-events-none"
+                    style={{
+                      bottom: `${fillLevel}%`,
+                      borderBottomRightRadius: '12px',
+                      borderBottomLeftRadius: '12px',
+                      opacity: isPouring ? 0.95 : 0,
+                      transition: 'opacity 300ms ease-out'
+                    }}
+                  >
+                    {/* Fast cascading stream overlay patterns */}
+                    <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.95)_45%,rgba(255,255,255,0)_100%)] h-32 w-full animate-pour-stream pointer-events-none"></div>
+                    <div className="absolute inset-y-0 left-1 right-1 bg-white/15 blur-[0.5px]"></div>
+                  </div>
+                )}
+                
+                {/* Collision Splashing particles/froth at fluid intersection */}
+                {isPouring && (
+                  <div 
+                    className="absolute left-1/2 -translate-x-1/2 bg-white/95 rounded-full flex flex-col items-center justify-center z-15 shadow-[0_0_25px_rgba(255,255,255,0.95),_0_-4px_12px_rgba(255,193,7,0.5)] border-t border-white/60 pointer-events-none"
+                    style={{
+                      bottom: `calc(${fillLevel}% - 8px)`,
+                      width: '45px',
+                      height: '18px',
+                    }}
+                  >
+                    {/* Splash micro bubbles */}
+                    <span className="w-full h-full rounded-full animate-ping bg-white/40 absolute"></span>
+                    <span className="text-[7px] text-[#A16207] font-black animate-pulse uppercase leading-none select-none tracking-tighter">POUR</span>
+                  </div>
+                )}
+
                 {/* Active frosty sweating condensation droplets on glass body */}
                 {sweatDrops.map((drop, idx) => (
                   <div
@@ -729,7 +823,7 @@ export default function App() {
 
               {/* Reduced Center Brand Logo */}
               <div id="header-logo-center" className="absolute left-1/2 transform -translate-x-1/2 flex items-center focus:outline-none select-none cursor-pointer" onClick={() => setScreen('home')}>
-                <TsunamiLogo size={58} showText={false} className="-mt-1 scale-[1.1]" imgStyle={{ width: '51px', paddingTop: '0px', marginLeft: '250px' }} />
+                <TsunamiLogo size={58} showText={false} className="-mt-1 scale-[1.1]" imgStyle={{ width: '51px', paddingTop: '0px' }} />
               </div>
 
               {/* Shopping Cart Trigger on Right */}
