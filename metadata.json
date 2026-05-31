@@ -1,0 +1,6 @@
+{
+  "name": "Tsunami Distribuidora",
+  "description": "Aplicativo de vendas de bebidas mobile-first da Tsunami Distribuidora, com vitrine de produtos, filtros de categoria, carrinho de compras inteligente e checkout completo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

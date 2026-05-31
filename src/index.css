@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Color Variables and Theme Helpers */
+:root {
+  --brand-navy: #FFC107;
+  --brand-navy-dark: #FF8F00;
+  --brand-navy-light: #FFEB3B;
+  --brand-gold: #FFD54F;
+  --brand-gold-dark: #B7791F;
+  --brand-red: #E53935;
+  --brand-red-dark: #C62828;
+  --brand-ice: #FFFFFF;
+  --brand-ice-glass: rgba(255, 193, 7, 0.08);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #070500; /* Rich premium dark golden-black background */
+  color: #f8fafc;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom scrollbars for category slider and general usage */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Premium Wet/Condensation Drops Background Effect */
+.bg-condensation {
+  background-image: 
+    radial-gradient(circle at 15px 15px, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 45px 55px, rgba(255, 255, 255, 0.09) 2px, transparent 2px),
+    radial-gradient(circle at 85px 30px, rgba(255, 255, 255, 0.06) 1.2px, transparent 1.2px),
+    radial-gradient(circle at 110px 80px, rgba(255, 255, 255, 0.07) 1.8px, transparent 1.8px);
+  background-size: 130px 130px;
+}
+
+/* Gold Shiny / Brilho Pulse Animations */
+@keyframes gold-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-gold-shimmer {
+  background: linear-gradient(
+    90deg, 
+    #FFC107 0%, 
+    #FFE082 25%, 
+    #FFC107 50%, 
+    #FFE082 75%, 
+    #FFC107 100%
+  );
+  background-size: 200% auto;
+  animation: gold-shimmer 4s linear infinite;
+}
+
+/* Beer Foam Wave Header effect */
+.foam-wave-path {
+  fill: #FFFFFF;
+  filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 0.25));
+}
+
+/* Freezing Cold Gold glow */
+.ice-glow {
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.35);
+}
+
+.ice-glow-text {
+  text-shadow: 0 0 10px rgba(255, 213, 79, 0.7);
+}
+
+/* Ice Glassmorphism */
+.ice-glass {
+  background: rgba(30, 18, 1, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 193, 7, 0.18);
+}
+
+.ice-glass-light {
+  background: rgba(255, 193, 7, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 193, 7, 0.12);
+}
+
+/* Bubble stream animation for background */
+@keyframes rise-bubbles {
+  0% {
+    transform: translateY(110%) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-20%) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.bubble-unit {
+  position: absolute;
+  bottom: 0;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.1) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bubble-rise-slow {
+  animation: rise-bubbles 9s infinite linear;
+}
+.bubble-rise-mid {
+  animation: rise-bubbles 6s infinite linear;
+}
+.bubble-rise-fast {
+  animation: rise-bubbles 4s infinite linear;
+}
+
+/* Pulsing premium glows */
+@keyframes ice-pulsate {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(21, 101, 192, 0.3), 0 0 15px rgba(21, 101, 192, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(21, 101, 192, 0.6), 0 0 25px rgba(21, 101, 192, 0.3);
+  }
+}
+
+.animate-ice-pulse {
+  animation: ice-pulsate 3s infinite ease-in-out;
+}
+
+/* Condensation drip animation for the filling beer glass background */
+@keyframes drip-animation {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(380px);
+    opacity: 0;
+  }
+}
+
+.animate-drip {
+  animation: drip-animation 8s infinite linear;
+}
+
